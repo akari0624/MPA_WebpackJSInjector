@@ -94,10 +94,9 @@ npm run ${script}WithBabel
 
 
 
-### already do, not test yet
+### already do
 -  設好WebpackHTMLPlugin，看會不會跑出多個build.js
+- 要使用Webpack  WriteFilePlugin 在dev時 讓jsp真的會寫進硬碟裡，不然proxy過去tomcat後會沒jsp可編譯
 
 ###  todo
 - webpack devServer要設proxy去tomcat
-- 要使用Webpack  WriteFilePlugin 在dev時 讓build.js真的會寫進硬碟裡，不然proxy過去tomcat後會沒js可下載
-- 
