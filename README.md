@@ -1,4 +1,6 @@
-# react+redux boilerplate simple starter with TypeScript environment
+# MPA_WebpackJSInjector
+
+### react+redux boilerplate simple starter with TypeScript environment
 
 ## easy and simple react starter without server side rendering
 
