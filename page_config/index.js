@@ -6,4 +6,4 @@
  * 
  * ex: jspPageMap = [{jsp:'AG1/AG1.jsp',js:'ag1/index.js'}]
  * */ 
-export const jspPageMap = [];
+exports.jspPageMap = [];

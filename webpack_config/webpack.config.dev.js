@@ -3,9 +3,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const WEBPACK_Config_Base = require('./webpack.config.base');
+const pagePaths = require('../page_config').jspPageMap
+const WriteFilePlugin = require('write-file-webpack-plugin')
+const jspPagePaths = pagePaths.map(o => o.jsp)
 
-const jspPagePaths = WEBPACK_Config_Base.ENTRY_POINT.map(o => o.jsp)
 const MULTIPLE_HTMLPluginInstanceInArr = require('./utils').generateMultipleWebpackHTMLPluginInstanceInOneArr(jspPagePaths)
+
+
 
 let __LOADERS_ARR;
 if(process.env.NODE_ENV === WEBPACK_Config_Base.NODE_ENV_Keywords.TRANSPILE_WITH_BABEL){
@@ -54,12 +58,18 @@ module.exports = {
           }
         ]
 
-      }
+      },
+      // 處理JSP的那些特殊語法  如<%= ... %>
+      { test: /\.jsp$/, loader: 'raw-loader' }
     ]
   },
   plugins: [
     ...MULTIPLE_HTMLPluginInstanceInArr,
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    // 讓Webpack dev-server真的會在硬碟裡產生檔案，不然Tomcat沒辦法用
+    new WriteFilePlugin({
+      test: /\.jsp|\.tld|\.xml$/,
+    })
   ],
   resolve: WEBPACK_Config_Base.RESOLVE_SETTING_CONFIG,
   devServer: {

@@ -6,16 +6,17 @@ const jspPageMapArr = require('../page_config').jspPageMap;
 
 
 
-const _returnMultipleJSPEntryPoint = (pJspPageMapArr, isWithPolyfill) => { 
+// webpack2的 entry的基準很像是看它指令在哪個資料夾底下下的  跟4不一樣
+const _returnMultipleJSEntryPoint = (pJspPageMapArr, isWithPolyfill) => { 
   
   let entryPointArr = []
 
   
-  if(isWithPolyfill){
+  if(isWithPolyfill) {
     entryPointArr.push('@babel/polyfill')
   }
 
-  pJspPageMapArr.forEach( p => entryPointArr.push(path.join(__dirname, '../', `./${p.js}`)))
+  pJspPageMapArr.forEach( p => {entryPointArr.push( `./src/${p.js}`)})
 
   return entryPointArr
 
@@ -23,8 +24,7 @@ const _returnMultipleJSPEntryPoint = (pJspPageMapArr, isWithPolyfill) => {
 
 module.exports = {
 
-  ENTRY_POINT: _returnMultipleJSPEntryPoint(jspPageMapArr, true),
-
+  ENTRY_POINT: _returnMultipleJSEntryPoint(jspPageMapArr, true),
   JS_TRANSPILE_LOADER_ARR_OPTIONS:{
     ONLY_TS_LOADER:[{loader:'ts-loader'}],
     TS_THEN_BABEL:[{loader:'babel-loader'},{loader:'ts-loader'}],
