@@ -12,8 +12,11 @@ exports.generateMultipleWebpackHTMLPluginInstanceInOneArr =
 
         // inject完之後  要把重新產生的檔案放在哪裡, 這路徑會以webpack的output-path為基準
         // 這個路徑不能在devServer的root裡，不然devServer會把它當靜態檔案提供  瀏覽器上就變成在下載檔案
-        filename: path.join( '../', `./${templateBuildedEmitPath}/${p}`)  
+        filename: path.join( '../', `./${templateBuildedEmitPath}/${p}`),
+        chunks:[p],  
        }
+
+       console.log(conf)
 
        return new HtmlWebPackPlugin(conf)
     })}

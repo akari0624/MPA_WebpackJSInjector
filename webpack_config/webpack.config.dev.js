@@ -30,8 +30,8 @@ module.exports = {
   devtool: 'source-map',
   output: {
     path: path.join(__dirname, '../', './'),
-    publicPath: '/',     // put the webapp name here
-    filename: 'bundle.js'
+    publicPath: '/',
+    filename: '[name].entry.js',  // tomcat這樣的server不適合在每次修改後變動hash 所以就不要在測試開發的時候使用hash了 
   },
 
   module: {
@@ -71,7 +71,7 @@ module.exports = {
   plugins: [
     ...MULTIPLE_HTMLPluginInstanceInArr,
     new webpack.HotModuleReplacementPlugin(),
-    // 讓Webpack dev-server真的會在硬碟裡產生檔案，不然Tomcat沒辦法用
+    // 讓Webpack dev-server真的會在硬碟裡產生jsp, html...檔案，不然Tomcat沒辦法用
     new WriteFilePlugin({
       test: /\.jsp|\.tld|\.xml$/,
     })
