@@ -97,6 +97,8 @@ npm run ${script}WithBabel
 ### already do
 -  設好WebpackHTMLPlugin，看會不會跑出多個build.js
 - 要使用Webpack  WriteFilePlugin 在dev時 讓jsp真的會寫進硬碟裡，不然proxy過去tomcat後會沒jsp可編譯
+- webpack devServer要設proxy去tomcat
 
 ###  todo
-- webpack devServer要設proxy去tomcat
+- 目前ts-loader或是tsc的版本太新，就無法跟webpack-dev-server2配合
+- build 出product bundle js在硬碟裡
