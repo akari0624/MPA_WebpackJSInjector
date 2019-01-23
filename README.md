@@ -1,97 +1,63 @@
 # MPA_WebpackJSInjector
 
-### react+redux boilerplate simple starter with TypeScript environment
+## 在傳統多頁應用程式上用modern javascript編譯流程寫JavaScript
 
-## easy and simple react starter without server side rendering
+### 需求
+- 很多時候工作環境上用的技術沒那麼新
+- 以`JAVA`來說，很多時候還是`多頁應用程式`
+  - 指 用`JSP`, `thymeleaf`...等等那樣傳統的server side render的模板引擎，在  
+    server端先準備好一堆HTML然後推送給瀏覽器的作法。通常一頁就會有一個`JSP`(雖然模板引擎非常多，但以下都以`JSP`為對象),  
+    跟今天的`SPA`的作法不同。
+- 即使如此，為了做出高互動式的使用介面，很多時候JS還是非常吃重。    
+- 那怎麼在這樣的專案底下，一樣能`寫ES6`, `將JS模組化`, `用webpack將js打包` ???  
 
-### how to use
+### 這個repo
+- 能夠在一個傳統的JAVA webapp上建立起modern javascript的寫程式流程。
+  - 建立好一個`multiple page application`在開發時應該做好的webpack設定  
+  包括：
+    1. 一個`jsp`作為一個webpack的entry point，所以多個`jsp`就會有多個`entry`提供給webpack
+    2. 一個`jsp`就會產生一個`bundle.js`。
+    3. 在開發時使用`webpack-dev-server`(以下稱`devServer`)，所以只要一修改編譯中的`js`檔案，一樣能支援Hot reload與瀏覽器自動刷新
+    4. 在webpack設定檔裡設定好`devServer`的`proxy`，只有`bundle.js`是由`devServer`的記憶體裡提供，而`JSP`, 圖片檔等各種asset則是由`devServer` 去向給背後的JAVA web app請求。
+    5. 使用`Webpack-HTML-Plugin`，在編譯出`bundle.js`完成之後，自動會在JAVA Webapp的硬碟空間裡多寫出一份，並在`</body>`前面加上`<script type=text/javascript src="/.....bundle.js" />`
+    6. 已經設定好`babel`, `typescript`等環境，可以寫`ES6+`，也可以寫`typescript`
+
+### 如何使用
+- 首先，電腦裡要裝好`node.js`與`npm`。
+- 用CMD cd到像是`JAVA Webapp`的`WebContent`那樣的地方
+  ``` sh
+    cd $path_to_webapp_WebContent
+  ```
+- 創好一個之後要在這個資料夾底下寫整個webapp的js的地方的資料夾，這裡先叫它`js`
+  ``` sh 
+  mkdir js
+  ```  
+- 進入這個資料夾
+  ``` sh
+  cd js
+  ```  
+- git clone 這個repo
+  ``` sh
+    git clone https://github.com/akari0624/MPA_WebpackJSInjector.git
+  ```
+- 安裝所有第三方套件
+  ``` sh
+    npm install
+  ```
+- 可以先把一些不重要的東西自己刪除 `.git`, `README.md`...等
+- 建議是用`VS Code`之類的適合Web前端開發的編輯器來寫`js`，不要用`Eclipse`或`IDEA`，不然會缺少`Eslint`等擴充插件
+- 在`page_config/index.js`底下，按照說明設定好一個個`jsp頁面`與其`對應的js打包的進入點`，有幾頁JSP要注入打包好後的js，就要有幾組`{jsp:..., js:...}`
+``` javascript
+exports.jspPageMap = [{
+  jsp:'page1/page1.jsp',js:'page1/index.js'
+}];
 ```
-git clone...  
-cd ...  
-npm install    # install all the 3rd-Party dependencies
-```
+- 在`webpack_config/utils/templateBuildsConfig.js`底下設定好Tomcat監聽的`port號`與當由`write-file-webpack-plugin`產生出注入`<script .... />`之後新產生出來的JSP要放在哪裡。
+  - `templateBuildedEmitPath`這個屬性設定好的資料夾名稱會出現在`src`上一層(所以就是`WebContent`底下那一層)，之後放著重新產生的temp的JSP，以讓`Tomcat`去使用。
+- 用CMD執行`npm run devWithBabel`，開啟`devServer`開始在src資料夾底下開始寫`javascript`
 
-### when compile...
-  - this boilerplate use webpack [ts-loader](https://github.com/TypeStrong/ts-loader) as a bridge between TypeScript and webpack. In this way, you can write TypeScript, enjoy the benefenit from Type-Checking and your javaScript also can be bundled and you still can code in a enjoyable develop environment( thanks to amazing webpack devServer!).
-  - You may want to check more about the `faster-builds` paragraph from `ts-loader` [doc](https://github.com/TypeStrong/ts-loader#faster-builds) to see more about the more implementation detail.
-
-### scripts
-```
-npm run dev
-```
-  - run your frontend-app with webpack-devServer when you are in develop
-
-
-```
-npm run fastbuild_dev
-```
- - use this script when your app become bigger to run fastBuild develop mode, this will require [fork-ts-checker-webpack-plugin](https://github.com/Realytics/fork-ts-checker-webpack-plugin) and it will  boot another process to do Type-Checking job
- - more ref:
-   - [ts-loader doc- faster-builds](https://github.com/TypeStrong/ts-loader#faster-builds)
-   - [blog post](https://medium.com/webpack/typescript-webpack-super-pursuit-mode-83cc568dea79) about fastBuild in TypeScript + webpack dev environment by ts-loader primary maintainer - John Reilly
-
- 
-```
-npm run dist
-```
-  - production mode, will generate bundle.js files to ./dist/...
-
-
-```
-npm run deploy 
-```
-  - help people to deploy their work to GH-Page, but you need to create a repository on Github first and  adjust `publicPath` property first in `webpack.config.prod.js`. [good Github Page detail reference on GatsbyJS doc](https://www.gatsbyjs.org/docs/how-gatsby-works-with-github-pages/) <-this script basic work like this 
-
-
-### tsconfig.json - the config file of TypeScript
-- most important part - compilerOptions
-[see what can be set](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
-
-
-###  `dev`, `fastbuild_dev`, `dist`, these three scripts have `withBabel` mode
-```
-npm run ${script}WithBabel
-```
-  - this will make webpack build the TypeScript code first time use ts-loader(it use the `tsc` i.e. TypeScript Compiler), generate the compiled JS code then forward them to babel-loader, let it do second time transpile to ensure the javascript code is you think in the `.babelrc`.
-  - `tsc` has the ability to transform TypeScript code to ES5 evne ES3,(set theme up in `tsconfig.json` [target](https://www.typescriptlang.org/docs/handbook/compiler-options.html)),
-  but what we need to realize is, `tsc` is a transpiler, it only do transpile but not doing `polyfill`,
-  [reference](https://github.com/frankwallis/plugin-typescript/issues/166#issuecomment-253413831)  
-  if you need to support old browser that their js engine don't support `ES6`, you still need to find 
-  a way to see what special function you use (e.g `Promise`, `async await`, `spread operator`...), and put on their corresponding polyfill, so even babel will make build time longer and make bundled js files bigger, it is a suitable solution if you need to support browser doesn't recognize ES6.
-  And babel has its ability that support newest javascript syntax and other features, so these scripts created for those usage scenario.
-  - @see 
-    - [typescript-and-babel-7](https://blogs.msdn.microsoft.com/typescript/2018/08/27/typescript-and-babel-7/)
-    - [ts-loader-issues-755](https://github.com/TypeStrong/ts-loader/issues/755)
-
-
-### about linting
-- eslint is not capable for TypeScript 
-- install `tslint` in local or global(/usr/local/bin). if you run `npm install`, you will install `tslint` locally, since I put that dependency in `package.json`
-- your IDE must need to install proper lint extension to collaborate with tslint, I use `TypeScript TSLint Plugin` in vs-code
-- use your lint rule in `tslint.json` file. [doc](https://github.com/palantir/tslint)
-[tslint.json example](https://palantir.github.io/tslint/usage/configuration/)
-- check `tslint` rules [here](https://palantir.github.io/tslint/rules/)
-- if you want to run `fastbuild_dev` mode, configuration for `tslint` is essential.
-
-
-### write your code
--  react components always contain `JSX` syntax, in TypeScript environment, the extension of these files must need to be `.tsx`.
-- simple js file , their extension must need to be `.ts`.
-
-### see my easy but practical example
-- checkout to `examples` branch to see the example code
-``` shell
-  git checkout examples
-```
-- or see them on Github directly
-  [examples branch](https://github.com/akari0624/react-starter_withTypeScript/tree/examples)
-
-
-### TypeScript learning resource
-- [Traversy Media  Crash course](https://www.youtube.com/watch?v=rAy_3SIqT-E)
-- great docs from [Microsoft TypeScript offical website](https://www.typescriptlang.org/index.html)
-- [piotrwitek/react-redux-typescript-guide](https://github.com/piotrwitek/react-redux-typescript-guide/blob/master/README.md)
-
+### 注意事項
+- 所有在JSP裡要include的js, css, 圖片, 檔案等，都不可以寫`相對路徑`，必須用`request.getContectPath()`之類的方式來組出url
 
 
 ### already do
@@ -100,5 +66,4 @@ npm run ${script}WithBabel
 - webpack devServer要設proxy去tomcat
 
 ###  todo
-- 目前ts-loader或是tsc的版本太新，就無法跟webpack-dev-server2配合
 - build 出product bundle js在硬碟裡
