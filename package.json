@@ -7,11 +7,11 @@
   "scripts": {
     "devWithBabel": "cross-env NODE_ENV=withBabel webpack-dev-server --inline --progress --config ./webpack_config/webpack.config.dev.js",
     "fastbuild_devWithBabel": "cross-env NODE_ENV=withBabel webpack-dev-server  --config ./webpack_config/webpack.config.dev.fastbuild.js",
-    "distWithBabel": "cross-env NODE_ENV=withBabel npm run clean && webpack --config ./webpack_config/webpack.config.prod.js --progress --bail --env dist -p",
+    "distWithBabel": "cross-env NODE_ENV=withBabel IS_PRODUCT=Y npm run clean && webpack --config ./webpack_config/webpack.config.prod.js --progress --bail --env dist -p",
     "deployWithBabel": "npm run distWithBabel && gh-pages -d dist",
     "test": "mocha --compilers js:babel-core/register --require babel-polyfill ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch",
-    "clean": "rimraf builds/*"
+    "clean": "rimraf dist/*"
   },
   "author": "",
   "license": "ISC",
