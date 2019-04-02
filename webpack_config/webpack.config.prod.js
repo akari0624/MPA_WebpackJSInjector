@@ -1,9 +1,15 @@
 'use strict';
 
 const path = require('path');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');  //to get some module already exits in webpack
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const WEBPACK_Config_Base = require('./webpack.config.base');
+
+const pagePaths = require('../page_config').jspPageMap;
+const jspPagePaths = pagePaths.map(o => o.jsp);
+const MULTIPLE_HTMLPluginInstanceInArr = require('./utils').generateMultipleWebpackHTMLPluginInstanceInOneArr(jspPagePaths)
+
+
 
 
 let __LOADERS_ARR;
@@ -52,24 +58,22 @@ module.exports = {
             }
           }
         ]
-      }
+      },
+      // 處理JSP的那些特殊語法  如<%= ... %>
+      { test: /\.jsp$/, loader: 'raw-loader' }
     ]
   },
-  plugins: [new HtmlWebPackPlugin({
-    template: path.join(__dirname, '../', 'index.html'),
-    filename: './index.html'
-  })],
-  resolve: WEBPACK_Config_Base.RESOLVE_SETTING_CONFIG,
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    },
-    minimizer: [new UglifyJSPlugin({
-      uglifyOptions: {
+  plugins: [
+    ...MULTIPLE_HTMLPluginInstanceInArr,
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest'
+    }),
+    new webpack.optimize.UglifyJsPlugin({
         compress: {
           drop_console: true
         }
-      }
-    })]
-  }
+    })
+  ],
+  resolve: WEBPACK_Config_Base.RESOLVE_SETTING_CONFIG,
+
 }
