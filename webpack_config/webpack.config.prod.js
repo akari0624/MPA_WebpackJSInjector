@@ -83,16 +83,4 @@ module.exports = {
   },
   plugins: GET_PLUGINS_ARR(MULTIPLE_HTMLPluginInstanceInArr),
   resolve: WEBPACK_Config_Base.RESOLVE_SETTING_CONFIG,
-  // optimization: {
-  //   splitChunks: {
-  //     chunks: 'all'
-  //   },
-  //   minimizer: [new UglifyJSPlugin({
-  //     uglifyOptions: {
-  //       compress: {
-  //         drop_console: true
-  //       }
-  //     }
-  //   })]
-  // }
 }
