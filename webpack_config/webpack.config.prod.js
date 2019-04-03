@@ -21,12 +21,31 @@ if(process.env.NODE_ENV === WEBPACK_Config_Base.NODE_ENV_Keywords.TRANSPILE_WITH
   __LOADERS_ARR = WEBPACK_Config_Base.JS_TRANSPILE_LOADER_ARR_OPTIONS.ONLY_TS_LOADER
 }
 
+const GET_PLUGINS_ARR = (MULTIPLE_HTMLPluginInstanceInArr) => {
+  let arr = [...MULTIPLE_HTMLPluginInstanceInArr]
+   
+  if(process.env.SEPA_VENDOR === 'Y'){
+    arr.push( new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor', 'manifest']
+    }))
+  }
+  
+  arr.push(new webpack.optimize.UglifyJsPlugin({
+    compress: {
+      drop_console: true
+    }
+  }))
+
+  return arr;
+
+}
+
 module.exports = {
   entry: WEBPACK_Config_Base.ENTRY_POINT,
   output: {
     path: path.join(__dirname, '../', 'dist'),
     publicPath: '/', // your webApp name(if has) on server put here.   eg:/MyWebApp
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash].js',
   },
 
   module: {
@@ -62,17 +81,18 @@ module.exports = {
       { test: /\.jsp$/, loader: 'raw-loader' }
     ]
   },
-  plugins: [
-    ...MULTIPLE_HTMLPluginInstanceInArr,
-    new webpack.optimize.CommonsChunkPlugin({
-      names: ['manifest', 'vendor']
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          drop_console: true
-        }
-    })
-  ],
+  plugins: GET_PLUGINS_ARR(MULTIPLE_HTMLPluginInstanceInArr),
   resolve: WEBPACK_Config_Base.RESOLVE_SETTING_CONFIG,
-
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all'
+  //   },
+  //   minimizer: [new UglifyJSPlugin({
+  //     uglifyOptions: {
+  //       compress: {
+  //         drop_console: true
+  //       }
+  //     }
+  //   })]
+  // }
 }

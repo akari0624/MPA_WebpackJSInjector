@@ -4,7 +4,11 @@ const path = require('path');
 
 const jspPageMapArr = require('../page_config').jspPageMap;
 
-
+const VENDOR_LIBS = [ 
+  'antd', 'axios', 'lodash.clonedeep', 'react', 'react-beautiful-dnd',
+  'react-dom', 'react-redux', 'react-router', 'react-router-dom', 'redux',
+  'redux-thunk', 'styled-components'
+]
 
 // webpack2的 entry的基準很像是看它指令在哪個資料夾底下下的  跟4不一樣
 const _returnMultipleJSEntryPoint = (pJspPageMapArr, isWithPolyfill) => { 
@@ -21,8 +25,13 @@ const _returnMultipleJSEntryPoint = (pJspPageMapArr, isWithPolyfill) => {
   
   })
 
+  if(process.env.IS_PRODUCT === 'Y' && process.env.SEPA_VENDOR === 'Y'){
+
+    entryPointsObj['vendor'] = VENDOR_LIBS
+  }
   console.log(entryPointsObj)
   return entryPointsObj
+
 
 }
 
