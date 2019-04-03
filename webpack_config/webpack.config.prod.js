@@ -26,8 +26,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '../', 'dist'),
     publicPath: '/', // your webApp name(if has) on server put here.   eg:/MyWebApp
-    filename: '[name].[chunkhash].js',
-    chunkFilename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash].js'
   },
 
   module: {
@@ -66,7 +65,7 @@ module.exports = {
   plugins: [
     ...MULTIPLE_HTMLPluginInstanceInArr,
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest'
+      names: ['manifest', 'vendor']
     }),
     new webpack.optimize.UglifyJsPlugin({
         compress: {
