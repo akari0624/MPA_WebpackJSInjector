@@ -43,8 +43,9 @@ const GET_PLUGINS_ARR = (MULTIPLE_HTMLPluginInstanceInArr) => {
 module.exports = {
   entry: WEBPACK_Config_Base.ENTRY_POINT,
   output: {
-    path: path.join(__dirname, '../', 'dist'),
-    publicPath: '/', // your webApp name(if has) on server put here.   eg:/MyWebApp
+    // path: path.join(__dirname, '../', 'dist'),
+    path: path.join(__dirname, '../', '../WebContent'),  // output到WebContent底下的 page_config/index.js 裡設定的 outputJS底下
+    publicPath: '/moiland', // your webApp name(if has) on server put here.   eg:/MyWebApp
     filename: '[name].[chunkhash].js',
   },
 

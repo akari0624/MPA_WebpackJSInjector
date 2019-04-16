@@ -8,4 +8,7 @@ npm-debug.log
 # personal setting
 .vscode/*
 
+# webpack devServer may output bundle.js under this directory when developing
+js/*
+
 

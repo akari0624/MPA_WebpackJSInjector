@@ -28,13 +28,13 @@
   ``` sh
     cd $path_to_webapp_WebContent
   ```
-- 創好一個之後要在這個資料夾底下寫整個webapp的js的地方的資料夾，這裡先叫它`js`
+- 創好一個之後要在這個資料夾底下寫整個webapp的js的地方的資料夾，這裡先叫它`js_src`
   ``` sh 
-  mkdir js
+  mkdir js_src
   ```  
 - 進入這個資料夾
   ``` sh
-  cd js
+  cd js_src
   ```  
 - git clone 這個repo
   ``` sh
@@ -46,10 +46,10 @@
   ```
 - 可以先把一些不重要的東西自己刪除 `.git`, `README.md`...等
 - 建議是用`VS Code`之類的適合Web前端開發的編輯器來寫`js`，不要用`Eclipse`或`IDEA`，不然會缺少`Eslint`等擴充插件
-- 在`page_config/index.js`底下，按照說明設定好一個個`jsp頁面`與其`對應的js打包的進入點`，有幾頁JSP要注入打包好後的js，就要有幾組`{jsp:..., js:...}`
+- 在`page_config/index.js`底下，按照說明設定好一個個`jsp頁面`與其`對應的js打包的進入點`，有幾頁JSP要注入打包好後的js，就要有幾組`{jsp:..., entryJS:..., outputJS:...}`
 ``` javascript
 exports.jspPageMap = [{
-  jsp:'page1/page1.jsp',js:'page1/index.js'
+  jsp:'page1/page1.jsp', entryJS:'page1/index.js', outputJS:'path/to/your/jsdir' 
 }];
 ```
 - 在`webpack_config/utils/templateBuildsConfig.js`底下設定好Tomcat監聽的`port號`與當由`write-file-webpack-plugin`產生出注入`<script .... />`之後新產生出來的JSP要放在哪裡。
@@ -60,10 +60,10 @@ exports.jspPageMap = [{
 - 所有在JSP裡要include的js, css, 圖片, 檔案等，都不可以寫`相對路徑`，必須用`request.getContectPath()`之類的方式來組出url
 
 
-### already do
+### 完成事項
 -  設好WebpackHTMLPlugin，看會不會跑出多個build.js
 - 要使用Webpack  WriteFilePlugin 在dev時 讓jsp真的會寫進硬碟裡，不然proxy過去tomcat後會沒jsp可編譯
 - webpack devServer要設proxy去tomcat
+- build 出product bundle js在硬碟裡
 
 ###  todo
-- build 出product bundle js在硬碟裡

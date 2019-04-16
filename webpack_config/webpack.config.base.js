@@ -18,9 +18,9 @@ const _returnMultipleJSEntryPoint = (pJspPageMapArr, isWithPolyfill) => {
 
   pJspPageMapArr.forEach( p => {
     if(isWithPolyfill) {
-      entryPointsObj[p.jsp] = ['@babel/polyfill', `./src/${p.js}`]
+      entryPointsObj[p.outputJS] = ['@babel/polyfill', `./src/${p.entryJS}`]
     }else{
-      entryPointsObj[p.jsp] = [`./src/${p.js}`]
+      entryPointsObj[p.outputJS] = [`./src/${p.entryJS}`]
     }
   
   })
