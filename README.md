@@ -67,3 +67,8 @@ exports.jspPageMap = [{
 - build 出product bundle js在硬碟裡
 
 ###  todo
+
+
+###  thanks
+本repo深受這篇文章啟發，在此銘謝
+[掘金用戶 nqdy666 - WEBPACK + JSP 构建多页应用](https://juejin.im/post/5a620b0c6fb9a01cb3164346)
